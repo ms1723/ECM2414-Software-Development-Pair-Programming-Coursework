@@ -5,9 +5,8 @@
 
 public class Deck {
     //Attributes
-
-    final private int SIZE;
     
+    // Change to list as not gonna be fixed size
     private Integer[] deckContents;
     private int deckNo;
 
@@ -15,16 +14,16 @@ public class Deck {
     //Constructors
     //Parameters - running count of decks = deckNo
     public Deck(){
-        //Must set deck number
+        //Must set deck number and initialized contents
     }
 
     //Getters
     public int getDeckNo(){
+        //Exception: Deck must have a number
     }
     //Setters
     //Parameters - takes in number to add from
     public void addToDeck(){
-        //Check if deck is full
 
         //Append number passed in to deck
     }
@@ -40,5 +39,10 @@ public class Deck {
         //If current item == pick number, remove from deckContents
 
         //return picked number (return type integer)
+    }
+
+    // May not need but it's here
+    public void sortDeck(){
+        // The deck is a queue
     }
 }

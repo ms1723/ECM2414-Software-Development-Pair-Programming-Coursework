@@ -10,4 +10,17 @@ Thursday 1st October
 12:30-2:10
 Made a plan for each class, planned out logic, class structure, needed clarifications on some aspects of problem
 Made a framework of the getters, setters, attributes and methods for each class
+Decided on using CamelCase
 Driver : Marcus, Navigator : Stephen
+
+Meeting 3
+
+Friday 2nd October
+After 9:30 Software Dev lecture, asked Solomon to clarify details: - Is the pack standard cards, i.e 1-13
+- Does the text file store the values of the cards or the object id
+- If it is card value, do we need to build the system around lost IDs
+Quick meeting:
+10:30-11:10
+Driver: Stephen, Navigator: Marcus
+Checked through what we did yesterday, added more details, looked at Exceptions, fleshed 0out Card.java
+Added a dump.java to log prototypes. Planned meeting 4 on Monday

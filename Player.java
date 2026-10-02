@@ -9,22 +9,24 @@ public class Player {
 
     private int playerNo;
     private Integer[] hand;
-    final private int HAND_SIZE;
+    final private int HAND_SIZE = 4;
 
     
     //Constructors
     //Parameters - running count of players = playerNo
     public Player(){
-        //Must set player number
+        //Must set player number and initializes the hand
     }
 
     //Getters
     public int getPlayerNo(){
+        //Exception: Check player exists
     }
     //Setters
     //Parameters - takes in number to add from
     public void addToHand(){
         //Check if hand is full
+        //Exeption is hand is full
 
         //Append number passed in to hand
 
@@ -32,7 +34,7 @@ public class Player {
     
     //Methods
     public chooseDiscard(){
-        //Check if hand is empty
+        //Exception: (interrupt maybe??) Check if hand is empty
         //Check if hand has any of playerNo, if so discard random that is not playerNo
 
         //Never discard playerNo even if repeated numbers that are not playerNo
