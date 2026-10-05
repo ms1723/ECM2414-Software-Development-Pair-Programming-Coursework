@@ -9,31 +9,41 @@ public class Card{
     private int cardValue;
     private String cardSuit;
     //Constructors
-    public Card(){
+    public Card(int cardID, int value, String suit){
         //Must set cardid, cardvalue and cardsuit
         //Can set basevalue and base suit Null
+        this.cardID = cardID;
+
+        //Must be greater than 0, raise exception
+        this.cardValue = value;
+
+        //Must be a valid suit
+        this.cardSuit = suit;
     }
 
     //Getters
     public int getCardID(){
         //return cardID
+        return this.cardID;
     }
 
     public int getCardValue(){
-
+        return this.cardValue;
     }
     
     public String getCardSuit(){
-
+        return this.cardSuit;
     }
 
     //Setters
-    public void setCardValue(){
-
+    public void setCardValue(int newValue){
+        //Must be greater than 0
+        this.cardValue = newValue;
     }
 
-    public void setCardSuit(){
-        
+    public void setCardSuit(String newSuit){
+        //Must be a valid suit
+        this.cardSuit = newSuit;
     }
 
     //Other Methods

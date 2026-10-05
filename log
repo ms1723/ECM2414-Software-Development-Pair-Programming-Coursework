@@ -24,3 +24,12 @@ Quick meeting:
 Driver: Stephen, Navigator: Marcus
 Checked through what we did yesterday, added more details, looked at Exceptions, fleshed 0out Card.java
 Added a dump.java to log prototypes. Planned meeting 4 on Monday
+
+Meeting 4
+Monday 5th October
+1:30-3:30
+Driver: Marcus, Navigator: Stephen
+Started implementation from Card and Player classes
+Made small changes to some attributes e.g changing the hand in Player to an ArrayList to make adding elements to hands easier.
+Bulk of work in player class - working on the choose discard implementation
+Added a custom exception for an empty hand
