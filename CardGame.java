@@ -1,6 +1,41 @@
 //Must be executable
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+//Works with threads
+//Needs a runnable method?
+//Threads to draw, discard and check?
 public class CardGame{
+    //Attributes
+    Scanner getInput = new Scanner(System.in);
+    ArrayList<Player> players;
+    ArrayList<Deck> decks;
+    ArrayList<String> fileNames;
+    int playerCount;
+
+    public class DrawDiscardThread extends Thread{
+        //Attributes
+        int playerNo;
+    }
+    //Methods
+    public void getUserInput(){
+
+    }
+    //Parameters - will take in a data structure which contains all the cards in a pack
+    public boolean validatePack(int playerCount){
+        //Validate that a pack contains a combination of cards in order to win
+    }
+
+    public void writePlayerFile(int playerNumber, String message){
+        
+    }
+
+    public void writeDeckFile(int deckNumber, String message){
+
+    }
+    
     //Get input for n players
     //Get input for name of text file (not creating anything, already made text file, the name will be loaded from this)
     //Exception: file not found

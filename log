@@ -33,3 +33,13 @@ Started implementation from Card and Player classes
 Made small changes to some attributes e.g changing the hand in Player to an ArrayList to make adding elements to hands easier.
 Bulk of work in player class - working on the choose discard implementation
 Added a custom exception for an empty hand
+
+Meeing 5
+Tuesday 6th October
+10:30-2:30
+Driver: Marcus, Navigator: Stephen
+Finished a prototype for chooseDiscard in Player
+Implemented Deck
+Set up some tests according to the specification
+Set up more custom exceptions
+Started to implement CardGame, need to clarify how threads work before continuing
