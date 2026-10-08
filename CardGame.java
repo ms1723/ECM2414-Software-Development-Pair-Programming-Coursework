@@ -1,5 +1,9 @@
 //Must be executable
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,11 +13,11 @@ import java.util.Scanner;
 //Threads to draw, discard and check?
 public class CardGame{
     //Attributes
-    Scanner getInput = new Scanner(System.in);
-    ArrayList<Player> players;
-    ArrayList<Deck> decks;
-    ArrayList<String> fileNames;
-    int playerCount;
+    private ArrayList<Integer> pack;
+    private ArrayList<Player> players;
+    private ArrayList<Deck> decks;
+    private ArrayList<String> fileNames;
+    private int playerCount;
 
     public class DrawDiscardThread extends Thread{
         //Attributes
@@ -21,11 +25,63 @@ public class CardGame{
     }
     //Methods
     public void getUserInput(){
+        // Ask number of players
+        String playerNumber = "0";
 
+        // Must be a non negative non 0 integer, so keep asking 
+        while (Integer.parseInt(playerNumber) <= 0){
+            Scanner numberOfPlayers = new Scanner(System.in);  // Create a Scanner object
+            System.out.println("How many player are there going to be?");
+
+            playerNumber = numberOfPlayers.nextLine();  // Read user input
+            System.out.println("You have picked" + playerNumber);  // Output user input
+            // Send to class attribute to be used by other methods,
+            this.playerCount = Integer.parseInt(playerNumber);
+
+            // Send error message if input doesnt reach requirements
+            if (Integer.parseInt(playerNumber) <= 0){
+                System.err.println("Must be a positive integer, re-enter number");
+            }
+        }
+
+        // Ask file name
+        Scanner fileNameScanner = new Scanner(System.in);  // Create a Scanner object
+        System.out.println("What is the file name for the deck of cards? (Including file type .txt)");
+
+        String fileName = fileNameScanner.nextLine();  // Read user input
+        System.out.println("Loading" + fileName);  // Output user input
     }
     //Parameters - will take in a data structure which contains all the cards in a pack
-    public boolean validatePack(int playerCount){
+    public boolean validateAndLoadPack(int playerCount, String packName) throws FileNotFoundException {
         //Validate that a pack contains a combination of cards in order to win
+        try (BufferedReader br = new BufferedReader(new FileReader(packName))) {
+            // List which holds the count for each occurance of a number
+            int[] cardItemized = new int[playerCount];  
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Convert the line to an integer
+                int lineAsNumber = Integer.parseInt(line);
+                // Load each item into the pack ArrayList as you go through the file
+                pack.add(lineAsNumber);
+                // Mark the occurance of that number 
+                cardItemized[lineAsNumber]++;
+            }
+            // Check if there is any value that has 4 or more cards
+            for (int count : cardItemized) {
+                if (count >= 4){
+                    // The pack is valid so return true
+                    return true;
+                }
+            }
+
+            // If not finding 4 or more cards of at least 1 value
+            return false;
+
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+            return false;
+        }
     }
 
     public void writePlayerFile(int playerNumber, String message){
@@ -35,16 +91,24 @@ public class CardGame{
     public void writeDeckFile(int deckNumber, String message){
 
     }
-    
-    //Get input for n players
-    //Get input for name of text file (not creating anything, already made text file, the name will be loaded from this)
-    //Exception: file not found
-    //Console input for both of them
-    //Exception: Player n has to be a non negative integer and also not 0
 
-    //Loop through n times to create n players
-    //Use current instantiation (this is i of the loop) to pass to parameter of initialisation of player
-    //Create n decks as well
+    // Creating the player objects
+    public void initializePlayers(){
+        // Loop for each player
+        for (int i = 1; i <= this.playerCount; i++){
+            // Add the new object for the player
+            players.add(new Player(i));
+        }
+    }
+
+    // Creating the deck objects
+    public void initializeDecks(){
+        // Loop for each player (will be 1 deck per player)
+        for (int i = 1; i <= this.playerCount; i++){
+            // Add the new object for the deck
+            decks.add(new Deck(i));
+        }
+    }
 
     //Distribute from pack 4 cards to each player
     //Loop of n times

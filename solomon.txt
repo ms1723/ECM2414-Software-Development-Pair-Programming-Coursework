@@ -1,3 +1,0 @@
-- Is the pack standard cards, i.e 1-13
-- Does the text file store the values of the cards or the object id
-- If it is card value, do we need to build the system around lost IDs
