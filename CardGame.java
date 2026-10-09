@@ -63,7 +63,7 @@ public class CardGame{
                 // Convert the line to an integer
                 int lineAsNumber = Integer.parseInt(line);
                 // Load each item into the pack ArrayList as you go through the file
-                pack.add(lineAsNumber);
+                this.pack.add(lineAsNumber);
                 // Mark the occurance of that number 
                 cardItemized[lineAsNumber]++;
             }
@@ -110,20 +110,43 @@ public class CardGame{
         }
     }
 
-    //Distribute from pack 4 cards to each player
-    //Loop of n times
-    //Each loop take bottom written line from txt file, add to player n
-    //Remove bottom written line from txt file
-    //(could be a method which performs distribution for players and decks, called for each one)
+    // Distributing the cards
+    public void distributeCards() throws Exception {
+        // Tally for number of cards, in order to correctly distribute cards + cardIDs
+        int cardCount = 0;
 
-    //4 passes, each pass distributes 1 card to each player, starting with 1 and ending with n
+        // Looping 4 times to give 4 cards to each player
+        for (int j = 1; j <= 4; j++) {
+            // Loop through players to distribute to the players
+            for (int i = 0; i < this.playerCount; i++){
+                Card currentCard = new Card(cardCount, this.pack.get(cardCount));
+                // Get the current player
+                Player currentPlayer = this.players.get(i);
 
-    //Remaining cards distributed to n equal sized decks
-    //4 passes, 4 cards per deck
-    //Loop of n times
-    //Each loop take bottom written line from txt file, add to deck n
-    //Remove bottom written line from txt file
-    //(could be a method which performs distribution for players and decks, called for each one)
+                // Add the current card to the current player's hand
+                currentPlayer.addToHand(currentCard);
+
+                // Increment cards grabs
+                cardCount++;
+            }
+        }
+
+        // Looping 4 times to give 4 cards to each deck
+        for (int j = 1; j <= 4; j++) {
+            // Loop through players to distribute to the decks
+            for (int i = 0; i < this.playerCount; i++){
+                Card currentCard = new Card(cardCount, this.pack.get(cardCount));
+                // Get the deck
+                Deck currentDeck = this.decks.get(i);
+
+                // Add the current card to the current player's hand
+                currentDeck.addToDeck(currentCard);
+
+                // Increment cards grabs
+                cardCount++;
+            }
+        }
+    }
 
     //Draw and discard must be done sequentially and must happen (either both or none happen)
     //Loop through n players

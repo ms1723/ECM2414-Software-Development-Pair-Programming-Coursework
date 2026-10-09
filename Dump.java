@@ -21,4 +21,20 @@ public class Dump {
     //Loop through n times to create n players
     //Use current instantiation (this is i of the loop) to pass to parameter of initialisation of player
     //Create n decks as well
+
+
+    //Distribute from pack 4 cards to each player
+    //Loop of n times
+    //Each loop take bottom written line from txt file, add to player n
+    //Remove bottom written line from txt file
+    //(could be a method which performs distribution for players and decks, called for each one)
+
+    //4 passes, each pass distributes 1 card to each player, starting with 1 and ending with n
+
+    //Remaining cards distributed to n equal sized decks
+    //4 passes, 4 cards per deck
+    //Loop of n times
+    //Each loop take bottom written line from txt file, add to deck n
+    //Remove bottom written line from txt file
+    //(could be a method which performs distribution for players and decks, called for each one)
 }

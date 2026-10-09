@@ -52,3 +52,11 @@ Setup user inputs,
 Setup error checking for the user inputs, and validation for the pack, as well as loading the pack. All in CarGame.java
 Added the methods to initialize the deck objects and player objects.
 Driver: Stephen, Navigator: Marcus
+
+
+Meeting 7
+Friday 9th October
+10:30-11:00
+Completed the distribute the cards function for both deck and player, intitalized cards, changed card to not do suits for now, planning on doing at end if we have time,
+Driver: Stephen, Navigator: Marcus
+
