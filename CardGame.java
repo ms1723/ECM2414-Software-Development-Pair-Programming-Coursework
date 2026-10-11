@@ -1,7 +1,7 @@
 //Must be executable
 
+
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,11 +52,12 @@ public class CardGame{
         System.out.println("Loading" + fileName);  // Output user input
     }
     //Parameters - will take in a data structure which contains all the cards in a pack
-    public boolean validateAndLoadPack(int playerCount, String packName) throws FileNotFoundException {
+    public boolean validateAndLoadPack(int playerCount, String packName) throws IOException {
         //Validate that a pack contains a combination of cards in order to win
         try (BufferedReader br = new BufferedReader(new FileReader(packName))) {
             // List which holds the count for each occurance of a number
-            int[] cardItemized = new int[playerCount];  
+            //Pack holds 8n cards
+            int[] cardItemized = new int[8*playerCount];  
 
             String line;
             while ((line = br.readLine()) != null) {
@@ -181,5 +182,18 @@ public class CardGame{
     //For each deck, write deck contents to individual deck output files
     //Exception: Deck must exist
 
-    
+    public void quickInitialize(int numberOfPlayers){
+        this.playerCount = numberOfPlayers;
+        this.players = new ArrayList<>();
+        this.decks = new ArrayList<>();
+        this.pack = new ArrayList<>();
+
+        this.initializePlayers();
+        this.initializeDecks();
+    }
+
+    //Accessor methods
+    public int getPlayerCount(){
+        return this.playerCount;
+    }
 }

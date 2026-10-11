@@ -23,7 +23,7 @@ public class CreateDeck {
         Collections.shuffle(cardPack);
         // Create the shuffled pack
         try {
-            File cardPackFile = new File("cardPackFile.txt"); 
+            File cardPackFile = new File("cardPackFile4.txt"); 
             if (cardPackFile.createNewFile()) {           // Try to create the file
                 System.out.println("File created: " + cardPackFile.getName());
             } else {
@@ -33,7 +33,7 @@ public class CreateDeck {
             System.out.println("An error occurred.");
             e.printStackTrace(); // Print error details
         }
-        try (FileWriter shufflePackFileWriter = new FileWriter("cardPackFile.txt");){
+        try (FileWriter shufflePackFileWriter = new FileWriter("cardPackFile4.txt");){
             // Loop for each line in the list
             for (int i = 0; i < cardPack.size(); i++) {
                 // If it's the first line don't start on a new line
@@ -50,6 +50,6 @@ public class CreateDeck {
         }
     }
     public static void main(String[] args) {
-        CreateDeck Pack1 = new CreateDeck(15);
+        CreateDeck Pack1 = new CreateDeck(4);
     }
 }

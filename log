@@ -60,3 +60,10 @@ Friday 9th October
 Completed the distribute the cards function for both deck and player, intitalized cards, changed card to not do suits for now, planning on doing at end if we have time,
 Driver: Stephen, Navigator: Marcus
 
+Sunday 11th October
+11:00-2:00
+Started working on testing (using JUnit 5)
+Tested loading a pack and a couple methods in Player
+Found some logic in Player needs tweaking
+Discarding a trio works properly.
+Driver: Marcus, Navigator: Stephen

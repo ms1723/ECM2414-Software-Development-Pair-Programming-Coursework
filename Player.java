@@ -53,7 +53,7 @@ public class Player {
     public Card chooseDiscard(int n) throws HandEmptyException, NullPointerException{
         //Local variable initialisation
         Card cardToDiscard = null;
-        ArrayList<Card> discardList = this.hand;
+        ArrayList<Card> discardList = new ArrayList<>();
         Integer[] occurrences = new Integer[n];
         ArrayList<Integer> pairs = new ArrayList<>();
         int trio = 0;
@@ -61,6 +61,11 @@ public class Player {
         //Check if hand has any of playerNo, if so discard random that is not playerNo
         if (this.hand.isEmpty()){
             throw new HandEmptyException("Hand is empty");
+        }
+
+        //Initialise occurrences
+        for(int i = 0; i < n; i++){
+            occurrences[i] = 0;
         }
 
         //Never discard playerNo even if repeated numbers that are not playerNo
@@ -80,6 +85,7 @@ public class Player {
         //If player has trio, discard number that is not in trio
         //If no pairs, no trios, pick random from numbers that are not playerNo
         for (int i = 0; i < occurrences.length; i++) {
+            System.out.println(occurrences[i]);
             if (occurrences[i] == 3){
                 trio = i;
             }
@@ -87,7 +93,7 @@ public class Player {
                 pairs.add(i);
             }
         }
-        
+
         int maxWeight = 0;
         int discardIndex = 0;
         //Weighting system to pick random number, higher chances for cards held onto for longer
