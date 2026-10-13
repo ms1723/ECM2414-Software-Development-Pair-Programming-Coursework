@@ -1,6 +1,7 @@
 //Must be executable
 
 
+import exceptions.PlayernotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,12 +18,8 @@ public class CardGame{
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
     private ArrayList<String> fileNames;
-    private int playerCount;
+    private static int playerCount;
 
-    public class DrawDiscardThread extends Thread{
-        //Attributes
-        int playerNo;
-    }
     //Methods
     public void getUserInput(){
         // Ask number of players
@@ -149,18 +146,55 @@ public class CardGame{
         }
     }
 
-    //Draw and discard must be done sequentially and must happen (either both or none happen)
-    //Loop through n players
-    //Write to initial hand (flag)
-    //Exception: Player must exist
-    //For each player, check if all cards are the same number for player n (call checkWinCondition)
-    //If it is, declare winner and end game
-    //If it isn't, next player
-    //If end of list, move on to draw and discard
+    public class DrawDiscardThread extends Thread {
+        //Attributes
+        Player currentPlayer;
 
-    //Loop n players
-    //For each player, draw card from deck n, discard to deck n+1
-    //Expection - if player == n, discard to 1
+        @Override 
+        public void run() {
+            try {
+                // Execption check that the player exists
+                if (!players.contains(currentPlayer)) {
+                    throw new PlayernotFoundException("Player not found");
+                } 
+                
+                try {
+                    if (true) {
+                        throw new InterruptedException("A player has won");
+                    }
+                // All of this needs to be in an overriden run method
+
+                // Check player is a winner
+                // Interrupt all threads if they do - needs to use notify
+                // Draw new card from draw pile - store card drawn in temporary variable
+                // Discard pile n+1 except if player number is n, then discard to 1
+                // Discard Card from hand - store card discarded in temporary variable
+                // Add discard card to discard pile
+                // Add drawn card to hand
+                // Make sure this is done atomically 
+
+               
+                
+                } catch (InterruptedException e) {
+                    // Threads need to be able to handle case where another player has won
+                    // All actions need to stop
+                    // Write to output file line of who is notifying the win
+            }
+                
+            } catch (PlayernotFoundException e) {
+            }
+        }
+
+    }
+
+    public static void main(String[] args) {
+        // Loop for each player 
+        for (int i = 1; i <= playerCount; i++) {
+            // Run draw and discard thread
+            
+        }
+    }
+
 
     //Write to each player's individual output file:
     //Exception: must be a positive non 0 integer

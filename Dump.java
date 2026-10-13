@@ -37,4 +37,17 @@ public class Dump {
     //Each loop take bottom written line from txt file, add to deck n
     //Remove bottom written line from txt file
     //(could be a method which performs distribution for players and decks, called for each one)
+
+    //Draw and discard must be done sequentially and must happen (either both or none happen)
+    //Loop through n players
+    //Write to initial hand (flag)
+    //Exception: Player must exist
+    //For each player, check if all cards are the same number for player n (call checkWinCondition)
+    //If it is, declare winner and end game
+    //If it isn't, next player
+    //If end of list, move on to draw and discard
+
+    //Loop n players
+    //For each player, draw card from deck n, discard to deck n+1
+    //Expection - if player == n, discard to 1
 }

@@ -60,6 +60,7 @@ Friday 9th October
 Completed the distribute the cards function for both deck and player, intitalized cards, changed card to not do suits for now, planning on doing at end if we have time,
 Driver: Stephen, Navigator: Marcus
 
+Meeting 8
 Sunday 11th October
 11:00-2:00
 Started working on testing (using JUnit 5)
@@ -69,9 +70,14 @@ Discarding a trio works properly.
 Driver: Marcus, Navigator: Stephen
 
 Tuesday 13th October
-
+Meeting 9
 10:30-11:40
 Worked more on Player discard behaviour
 Added more cases for discards
 Trying to test Deck FIFO behaviour
 Driver: Marcus
+
+Meeting 10
+14:30-15:30
+Began threading implementation, and main, implemented exceptions for threading
+Driver: Stephen, Navigator: Marcus
