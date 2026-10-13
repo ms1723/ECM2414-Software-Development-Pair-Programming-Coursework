@@ -51,6 +51,21 @@ public class ChooseCorrectDiscardTest {
         assertTrue(player.chooseDiscard(4) == card4);
     }
 
+    @Test 
+    void discardsTrioHighestWeight() throws Exception{
+
+    }
+
+    @Test
+    void discardsPairHighestWeight() throws Exception{
+
+    }
+
+    @Test
+    void discardsHighestWeight() throws Exception{
+
+    }
+
     @Test
     void packLoads() throws IOException{
         game.quickInitialize(4);

@@ -85,7 +85,6 @@ public class Player {
         //If player has trio, discard number that is not in trio
         //If no pairs, no trios, pick random from numbers that are not playerNo
         for (int i = 0; i < occurrences.length; i++) {
-            System.out.println(occurrences[i]);
             if (occurrences[i] == 3){
                 trio = i;
             }
@@ -137,17 +136,18 @@ public class Player {
                 //Case where pair is preferred over other non-preferred values
                 } else{
                     for (int j = 0; j < n; j++) {
-                        if ((weighting[j] > maxWeight) && (j != pairs.get(0))){
-                            maxWeight = weighting[j];
-                            discardIndex = j;
-                    
+                        if (!pairs.contains(j)){
+                            if (weighting[j] >= maxWeight){
+                                maxWeight = weighting[j];
+                                discardIndex = j;
+                            }
                         }
                     }
                 } 
             //Checking case where there are no pairs or trios
             } else {
                 for (int j = 0; j < n; j++) {
-                    if ((weighting[j] > maxWeight) && (j != pairs.get(0))){
+                    if (weighting[j] > maxWeight){
                         maxWeight = weighting[j];
                         discardIndex = j;
                     }
@@ -155,6 +155,10 @@ public class Player {
             }
         //discardList should always hold the correct card to discard
         //Holds regardless of the structure of the hand
+        if (discardList.size() < 4){
+            discardIndex = discardIndex - (4 - discardList.size());
+        }
+
         cardToDiscard = discardList.get(discardIndex);
         //Whenever a slot changes, reset time that slot has been held
         //+1 to all times, starts from 0
