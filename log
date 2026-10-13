@@ -70,7 +70,8 @@ Driver: Marcus, Navigator: Stephen
 
 Tuesday 13th October
 
-10:30-11:10
+10:30-11:40
 Worked more on Player discard behaviour
 Added more cases for discards
+Trying to test Deck FIFO behaviour
 Driver: Marcus

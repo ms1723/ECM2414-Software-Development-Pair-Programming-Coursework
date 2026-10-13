@@ -12,4 +12,8 @@ public class ImmediateWinTest {
     void setUp() throws Exception{
         game = new CardGame();
     }
+
+    @Test
+    void generatesCorrectOutputFiles() throws Exception{
+    }
 }
