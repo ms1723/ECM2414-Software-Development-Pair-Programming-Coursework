@@ -1,5 +1,6 @@
 // Any unused methods or class structures, that changed from our plan
 
+import java.util.ArrayList;
 
 public class Dump {
 
@@ -50,4 +51,19 @@ public class Dump {
     //Loop n players
     //For each player, draw card from deck n, discard to deck n+1
     //Expection - if player == n, discard to 1
+
+    // All of this needs to be in an overriden run method
+
+        // Method to create the list of threads, so all active threads can be easily accessed
+    public void makeThreads() {
+        // Initialize list of threads
+        this.threadList = new ArrayList<>();
+
+        // Loop for each player 
+        for (int i = 1; i <= playerCount; i++) {
+            // Create all the threads and store them in threadList
+            DrawDiscardThread currentThread = new DrawDiscardThread(this.players.get(i)).start();
+            this.threadList.add(currentThread);
+        }
+    }
 }

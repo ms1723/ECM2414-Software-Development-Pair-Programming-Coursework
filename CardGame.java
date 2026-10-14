@@ -18,6 +18,7 @@ public class CardGame{
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
     private ArrayList<String> fileNames;
+    private ArrayList<Thread> threadList;
     private static int playerCount;
 
     //Methods
@@ -150,6 +151,11 @@ public class CardGame{
         //Attributes
         Player currentPlayer;
 
+        // Constructor
+        public DrawDiscardThread (Player currentPlayer){
+            this.currentPlayer = currentPlayer;
+        }
+
         @Override 
         public void run() {
             try {
@@ -159,10 +165,10 @@ public class CardGame{
                 } 
                 
                 try {
-                    if (true) {
+                    // Check if there's a winner, notify all threads if there is one
+                    if (currentPlayer.checkWinCondition()) {
                         throw new InterruptedException("A player has won");
                     }
-                // All of this needs to be in an overriden run method
 
                 // Check player is a winner
                 // Interrupt all threads if they do - needs to use notify
@@ -187,14 +193,28 @@ public class CardGame{
 
     }
 
-    public static void main(String[] args) {
+    // Method to create the list of threads, so all active threads can be easily accessed
+    public void makeThreads() {
+        // Initialize list of threads
+        this.threadList = new ArrayList<>();
+
         // Loop for each player 
         for (int i = 1; i <= playerCount; i++) {
-            // Run draw and discard thread
+            // Create all the threads and store them in threadList
             
+            this.threadList.add(currentThread);
         }
     }
 
+    public static void main(String[] args) {
+        // Make the threads
+        for (int i = 1; i <= playerCount; i++) {
+            new DrawDiscardThread(i).start();
+        }
+        // Catch theres a win interrupt
+        // Loop through all threads, and do thread.interrupt()
+    }
+    // Then for interrupts iterate through the list to interrupt them all
 
     //Write to each player's individual output file:
     //Exception: must be a positive non 0 integer
