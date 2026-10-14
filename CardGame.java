@@ -5,9 +5,10 @@ import exceptions.PlayernotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import jdk.jshell.spi.ExecutionControl;
 
 //Works with threads
 //Needs a runnable method?
@@ -152,8 +153,8 @@ public class CardGame{
         Player currentPlayer;
 
         // Constructor
-        public DrawDiscardThread (Player currentPlayer){
-            this.currentPlayer = currentPlayer;
+        public DrawDiscardThread (int i){
+            this.currentPlayer = players.get(i);
         }
 
         @Override 
@@ -179,7 +180,7 @@ public class CardGame{
                 // Add drawn card to hand
                 // Make sure this is done atomically 
 
-               
+                
                 
                 } catch (InterruptedException e) {
                     // Threads need to be able to handle case where another player has won
@@ -194,23 +195,27 @@ public class CardGame{
     }
 
     // Method to create the list of threads, so all active threads can be easily accessed
-    public void makeThreads() {
+    public Array makeThreads() {
         // Initialize list of threads
-        this.threadList = new ArrayList<>();
+        DrawDiscardThread threadList[] = new DrawDiscardThread[playerCount];
 
         // Loop for each player 
         for (int i = 1; i <= playerCount; i++) {
             // Create all the threads and store them in threadList
-            
-            this.threadList.add(currentThread);
+            threadList[i] = new DrawDiscardThread(i);
+            threadList[i].start();
         }
+        for (int j = 1; j <= playerCount; j++) {
+            try {
+                threadList[j].join(); 
+            } catch (InternalException e) {
+            }
+            
+        }
+        return DrawDiscardThread.threadList[];
     }
 
-    public static void main(String[] args) {
-        // Make the threads
-        for (int i = 1; i <= playerCount; i++) {
-            new DrawDiscardThread(i).start();
-        }
+    public static void main(String[] args){
         // Catch theres a win interrupt
         // Loop through all threads, and do thread.interrupt()
     }
