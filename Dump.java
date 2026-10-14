@@ -54,16 +54,11 @@ public class Dump {
 
     // All of this needs to be in an overriden run method
 
-        // Method to create the list of threads, so all active threads can be easily accessed
-    public void makeThreads() {
-        // Initialize list of threads
-        this.threadList = new ArrayList<>();
+    // Threads need to be able to handle case where another player has won
+    // All actions need to stop
+    // Write to output file line of who is notifying the win
 
-        // Loop for each player 
-        for (int i = 1; i <= playerCount; i++) {
-            // Create all the threads and store them in threadList
-            DrawDiscardThread currentThread = new DrawDiscardThread(this.players.get(i)).start();
-            this.threadList.add(currentThread);
-        }
-    }
+    // Write to everyone elses file (Each player's file only receives their one notify message)
+    // For each player (if currentPlayer = n, then inform player 1)
+    // Write to file "currentPlayer has informed currentPlayer+1 that currentPlayer has won"
 }

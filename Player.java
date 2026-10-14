@@ -33,6 +33,16 @@ public class Player {
         //Exception: Check player exists
         return this.playerNo;
     }
+
+    public String getHand(){
+        return (
+            hand.get(0).toString() + " " + 
+            hand.get(1).toString() + " " + 
+            hand.get(2).toString() + " " + 
+            hand.get(3).toString()
+        );
+    }
+
     //Setters
     //Parameters - takes in number to add from
     public void addToHand(Card cardToAdd) throws Exception{
@@ -186,4 +196,6 @@ public class Player {
         //All cards have been checked as the same number, therefore this hand wins
         return true;
     }
+
+
 }

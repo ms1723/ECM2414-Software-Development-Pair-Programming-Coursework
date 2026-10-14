@@ -3,12 +3,12 @@
 
 import exceptions.PlayernotFoundException;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
-import jdk.jshell.spi.ExecutionControl;
 
 //Works with threads
 //Needs a runnable method?
@@ -19,7 +19,7 @@ public class CardGame{
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
     private ArrayList<String> fileNames;
-    private ArrayList<Thread> threadList;
+    private DrawDiscardThread[] threadList;
     private static int playerCount;
 
     //Methods
@@ -131,6 +131,35 @@ public class CardGame{
             }
         }
 
+        // Create all the player's files.txt
+        for (int i = 0; i <= playerCount; i++) {
+            Player currentPlayer = this.players.get(i);
+            try {
+                File currentPlayerFile = new File("Player"+i+"file.txt");
+                if (currentPlayerFile.createNewFile()) {           // Try to create the file
+                    System.out.println("File created: " + currentPlayerFile.getName());
+                    // Write to all the player's files their initial hand
+                    try {
+                        FileWriter currentPlayerFileWriter = new FileWriter(currentPlayerFile.getName());
+                        currentPlayerFileWriter.write("player " + i + " " + currentPlayer.getHand());
+                        currentPlayerFileWriter.close();  // must close manually
+                        System.out.println("Successfully wrote to the file.");
+                    } catch (IOException e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    System.out.println("File already exists.");
+                }
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace(); // Print error details
+            }
+        }
+
+        
+
         // Looping 4 times to give 4 cards to each deck
         for (int j = 1; j <= 4; j++) {
             // Loop through players to distribute to the decks
@@ -151,6 +180,7 @@ public class CardGame{
     public class DrawDiscardThread extends Thread {
         //Attributes
         Player currentPlayer;
+        int currentPlayerID = currentPlayer.getPlayerNo();
 
         // Constructor
         public DrawDiscardThread (int i){
@@ -181,11 +211,49 @@ public class CardGame{
                 // Make sure this is done atomically 
 
                 
-                
+                // Catch statement for when a player wins
                 } catch (InterruptedException e) {
-                    // Threads need to be able to handle case where another player has won
-                    // All actions need to stop
-                    // Write to output file line of who is notifying the win
+                    // Player has won so interrupt all threads
+                    InterruptAllThreads();
+
+                    // Write to terminal currentPlayer wins
+                    System.out.println("player" + currentPlayerID + "wins");
+
+                    // Write to the winner's file:
+                    try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+currentPlayerID+"file.txt")){
+                        currentPlayerFileWriter.write("player " + currentPlayerID + " wins");
+                        currentPlayerFileWriter.write("player " + currentPlayerID + " exits");
+                        currentPlayerFileWriter.write("player " + currentPlayerID + " final hand: " + currentPlayer.getHand());
+                        currentPlayerFileWriter.close();  // must close manually
+                        System.out.println("Successfully wrote to the file.");
+                    } catch (IOException fileDoestExist) {
+                        System.out.println("An error occurred.");
+                        fileDoestExist.printStackTrace();
+                    }
+                    
+                    // Loop through players to notify them all that someone has won
+                    for (Player iteratePlayer : players) {
+                        int itereratePlayerID = iteratePlayer.getPlayerNo();
+                        // Don't notify the winner that they've won
+                        if (currentPlayer != iteratePlayer){
+                            try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+itereratePlayerID+"file.txt")){
+                                currentPlayerFileWriter.write(
+                                    "player " + 
+                                    currentPlayerID + 
+                                    " has informed " + 
+                                    itereratePlayerID + 
+                                    " that " + 
+                                    currentPlayerID + 
+                                    " has won"
+                                );
+                                currentPlayerFileWriter.close();  // must close manually
+                                System.out.println("Successfully wrote to the file.");
+                            } catch (IOException fileDoestExist) {
+                                System.out.println("An error occurred.");
+                                fileDoestExist.printStackTrace();
+                            }
+                        }
+                    }
             }
                 
             } catch (PlayernotFoundException e) {
@@ -195,27 +263,41 @@ public class CardGame{
     }
 
     // Method to create the list of threads, so all active threads can be easily accessed
-    public Array makeThreads() {
+    public DrawDiscardThread[] makeThreads() {
         // Initialize list of threads
         DrawDiscardThread threadList[] = new DrawDiscardThread[playerCount];
 
-        // Loop for each player 
-        for (int i = 1; i <= playerCount; i++) {
-            // Create all the threads and store them in threadList
-            threadList[i] = new DrawDiscardThread(i);
-            threadList[i].start();
-        }
-        for (int j = 1; j <= playerCount; j++) {
-            try {
-                threadList[j].join(); 
-            } catch (InternalException e) {
+        try {
+            // Loop for each player 
+            for (int i = 1; i <= playerCount; i++) {
+                // Create all the threads and store them in threadList
+                threadList[i] = new DrawDiscardThread(i);
+                threadList[i].start();
             }
-            
+            for (int j = 1; j <= playerCount; j++) {
+                try {
+                    threadList[j].join(); 
+                } catch (InterruptedException e) {
+                }
+            }
+
+        } catch (InterruptedException e) {
+
         }
-        return DrawDiscardThread.threadList[];
+
+        return threadList;
+    }
+
+    // Method to interrupt all the threads, used when a winner is found
+    public void InterruptAllThreads() {
+        // Interrupt all threads
+        for (DrawDiscardThread currentThread : threadList) {
+            currentThread.interrupt();
+        }
     }
 
     public static void main(String[] args){
+
         // Catch theres a win interrupt
         // Loop through all threads, and do thread.interrupt()
     }

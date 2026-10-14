@@ -87,3 +87,9 @@ Meeting 11
 10:30-11:30
 Continued threading implementation, added method to create threads
 Driver: Stephen, Navigator: Marcus
+
+Meeting 12
+12:30-13:30
+Fixed problem with static object and implementation of a list of threads, finished method to create threads
+Began write to file win conditon. Added creation for player files in distrubute cards, as well as initial input to the files.
+Driver: Stephen, Navigator: Marcus
