@@ -64,4 +64,32 @@ public class Dump {
 
      // Check player is a winner
      // Interrupt all threads if they do - needs to use notify
+    // Draw new card from draw pile - store card drawn in temporary variable
+    // Discard pile n+1 except if player number is n, then discard to 1
+    // Discard Card from hand - store card discarded in temporary variable
+    // Add discard card to discard pile
+    // Add drawn card to hand
+    // Make sure this is done atomically 
+    
+    // Then for interrupts iterate through the list to interrupt them all
+
+    //Write to each player's individual output file:
+    //Exception: must be a positive non 0 integer
+    //Draw
+    //Exeption: There must be a card in the draw pile
+    //Draw deck must exist
+    //Discard
+    //Exception: discard deck must exist
+    //Current hand
+    //Exception: Player must exist
+
+    //After draw and discard have finished for a given player, that player is checked again
+
+    //All threads should run in parallel (must use synchronise())
+    //If a thread is faster, and empties a draw deck, then it has to wait until the deck isn't empty
+    //(this is starvation mention that the doc)
+
+    //End game
+    //For each deck, write deck contents to individual deck output files
+    //Exception: Deck must exist
 }

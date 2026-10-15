@@ -1,9 +1,11 @@
 //Must be executable
 
 
+import exceptions.HandEmptyException;
 import exceptions.PlayernotFoundException;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,12 +20,11 @@ public class CardGame{
     private ArrayList<Integer> pack;
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
-    private ArrayList<String> fileNames;
     private DrawDiscardThread[] threadList;
     private static int playerCount;
 
     //Methods
-    public void getUserInput(){
+    public String getUserInput(){
         // Ask number of players
         String playerNumber = "0";
 
@@ -35,20 +36,35 @@ public class CardGame{
             playerNumber = numberOfPlayers.nextLine();  // Read user input
             System.out.println("You have picked" + playerNumber);  // Output user input
             // Send to class attribute to be used by other methods,
-            this.playerCount = Integer.parseInt(playerNumber);
+            CardGame.playerCount = Integer.parseInt(playerNumber);
 
             // Send error message if input doesnt reach requirements
             if (Integer.parseInt(playerNumber) <= 0){
                 System.err.println("Must be a positive integer, re-enter number");
+            } else {
+                numberOfPlayers.close();
             }
         }
 
         // Ask file name
-        Scanner fileNameScanner = new Scanner(System.in);  // Create a Scanner object
         System.out.println("What is the file name for the deck of cards? (Including file type .txt)");
+        try (Scanner fileNameScanner = new Scanner(System.in) // Create a Scanner object
+        ) {
+            String fileName = fileNameScanner.nextLine();  // Read user input
+            File doesFileExist = new File(fileName);
+            if (doesFileExist.exists()){
+                System.out.println("Loading" + fileName);  // Output user input
+            } else {
+                throw new FileNotFoundException();
+            }
 
-        String fileName = fileNameScanner.nextLine();  // Read user input
-        System.out.println("Loading" + fileName);  // Output user input
+            return fileName;
+            
+        } catch (FileNotFoundException e) {
+            System.out.println("File Doesn't Exist");
+            e.printStackTrace();
+            return "An Error Occured";
+        }
     }
     //Parameters - will take in a data structure which contains all the cards in a pack
     public boolean validateAndLoadPack(int playerCount, String packName) throws IOException {
@@ -84,18 +100,10 @@ public class CardGame{
         }
     }
 
-    public void writePlayerFile(int playerNumber, String message){
-        
-    }
-
-    public void writeDeckFile(int deckNumber, String message){
-
-    }
-
     // Creating the player objects
     public void initializePlayers(){
         // Loop for each player
-        for (int i = 1; i <= this.playerCount; i++){
+        for (int i = 1; i <= CardGame.playerCount; i++){
             // Add the new object for the player
             players.add(new Player(i));
         }
@@ -104,7 +112,7 @@ public class CardGame{
     // Creating the deck objects
     public void initializeDecks(){
         // Loop for each player (will be 1 deck per player)
-        for (int i = 1; i <= this.playerCount; i++){
+        for (int i = 1; i <= CardGame.playerCount; i++){
             // Add the new object for the deck
             decks.add(new Deck(i));
         }
@@ -138,17 +146,11 @@ public class CardGame{
                 File currentPlayerFile = new File("Player"+i+"file.txt");
                 if (currentPlayerFile.createNewFile()) {           // Try to create the file
                     System.out.println("File created: " + currentPlayerFile.getName());
-                    // Write to all the player's files their initial hand
-                    try {
-                        FileWriter currentPlayerFileWriter = new FileWriter(currentPlayerFile.getName());
+                    try ( // Write to all the player's files their initial hand
+                        FileWriter currentPlayerFileWriter = new FileWriter(currentPlayerFile.getName())) {
                         currentPlayerFileWriter.write("player " + i + " " + currentPlayer.getHand());
-                        currentPlayerFileWriter.close();  // must close manually
                         System.out.println("Successfully wrote to the file.");
-                    } catch (IOException e) {
-                        System.out.println("An error occurred.");
-                        e.printStackTrace();
                     }
-
                 } else {
                     System.out.println("File already exists.");
                 }
@@ -163,7 +165,7 @@ public class CardGame{
         // Looping 4 times to give 4 cards to each deck
         for (int j = 1; j <= 4; j++) {
             // Loop through players to distribute to the decks
-            for (int i = 0; i < this.playerCount; i++){
+            for (int i = 0; i < CardGame.playerCount; i++){
                 Card currentCard = new Card(cardCount, this.pack.get(cardCount));
                 // Get the deck
                 Deck currentDeck = this.decks.get(i);
@@ -173,6 +175,21 @@ public class CardGame{
 
                 // Increment cards grabs
                 cardCount++;
+            }
+        }
+
+        // Create all the decks's files.txt
+        for (int i = 0; i <= decks.size(); i++) {
+            try {
+                File currentDeckFile = new File("Deck"+i+"file.txt");
+                if (currentDeckFile.createNewFile()) {           // Try to create the file
+                    System.out.println("File created: " + currentDeckFile.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace(); // Print error details
             }
         }
     }
@@ -226,7 +243,7 @@ public class CardGame{
                     // Draw a card
                     try {
                         drawCard = drawDeck.pickCard();
-                    } catch (Exception e) {
+                    } catch (NullPointerException e) {
                         System.out.println("An error occurred.");
                         e.printStackTrace();
                     }
@@ -235,6 +252,12 @@ public class CardGame{
                     // Discard the card
                     try {
                         discardCard = currentPlayer.chooseDiscard(players.size());
+                    } catch (HandEmptyException e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
+                    } catch (NullPointerException e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
                     } catch (Exception e) {
                         System.out.println("An error occurred.");
                         e.printStackTrace();
@@ -249,14 +272,6 @@ public class CardGame{
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
-                // Draw new card from draw pile - store card drawn in temporary variable
-                // Discard pile n+1 except if player number is n, then discard to 1
-                // Discard Card from hand - store card discarded in temporary variable
-                // Add discard card to discard pile
-                // Add drawn card to hand
-                // Make sure this is done atomically 
 
                 
                 // Catch statement for when a player wins
@@ -305,6 +320,8 @@ public class CardGame{
             }
                 
             } catch (PlayernotFoundException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
             }
         }
 
@@ -313,24 +330,22 @@ public class CardGame{
     // Method to create the list of threads, so all active threads can be easily accessed
     public DrawDiscardThread[] makeThreads() {
         // Initialize list of threads
-        DrawDiscardThread threadList[] = new DrawDiscardThread[playerCount];
+        threadList = new DrawDiscardThread[playerCount];
 
-        try {
-            // Loop for each player 
-            for (int i = 1; i <= playerCount; i++) {
-                // Create all the threads and store them in threadList
-                threadList[i] = new DrawDiscardThread(i);
-                threadList[i].start();
+
+        // Loop for each player 
+        for (int i = 1; i <= playerCount; i++) {
+            // Create all the threads and store them in threadList
+            threadList[i] = new DrawDiscardThread(i);
+            threadList[i].start();
+        }
+        for (int j = 1; j <= playerCount; j++) {
+            try {
+                threadList[j].join(); 
+            } catch (InterruptedException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
             }
-            for (int j = 1; j <= playerCount; j++) {
-                try {
-                    threadList[j].join(); 
-                } catch (InterruptedException e) {
-                }
-            }
-
-        } catch (InterruptedException e) {
-
         }
 
         return threadList;
@@ -344,35 +359,11 @@ public class CardGame{
         }
     }
 
-    public static void main(String[] args){
-
-        // Catch theres a win interrupt
-        // Loop through all threads, and do thread.interrupt()
-    }
-    // Then for interrupts iterate through the list to interrupt them all
-
-    //Write to each player's individual output file:
-    //Exception: must be a positive non 0 integer
-    //Draw
-    //Exeption: There must be a card in the draw pile
-    //Draw deck must exist
-    //Discard
-    //Exception: discard deck must exist
-    //Current hand
-    //Exception: Player must exist
-
-    //After draw and discard have finished for a given player, that player is checked again
-
-    //All threads should run in parallel (must use synchronise())
-    //If a thread is faster, and empties a draw deck, then it has to wait until the deck isn't empty
-    //(this is starvation mention that the doc)
-
-    //End game
-    //For each deck, write deck contents to individual deck output files
-    //Exception: Deck must exist
+    // public static void main(String[] args){
+    // }
 
     public void quickInitialize(int numberOfPlayers){
-        this.playerCount = numberOfPlayers;
+        CardGame.playerCount = numberOfPlayers;
         this.players = new ArrayList<>();
         this.decks = new ArrayList<>();
         this.pack = new ArrayList<>();
@@ -383,6 +374,6 @@ public class CardGame{
 
     //Accessor methods
     public int getPlayerCount(){
-        return this.playerCount;
+        return CardGame.playerCount;
     }
 }
