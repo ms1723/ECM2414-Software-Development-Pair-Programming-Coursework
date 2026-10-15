@@ -181,10 +181,32 @@ public class CardGame{
         //Attributes
         Player currentPlayer;
         int currentPlayerID = currentPlayer.getPlayerNo();
+        Deck drawDeck;
+        Deck discardDeck;
+        Card drawCard;
+        Card discardCard;
+
+        // Assign the draw and discard decks,
+        public void findDecks() {
+                // If the player number is not the first or last player number
+                if (currentPlayerID != 1 && currentPlayerID != players.size()) {
+                    drawDeck = decks.get(currentPlayerID - 1);
+                    discardDeck = decks.get(currentPlayerID + 1);
+                // If the first player
+                } else if (currentPlayerID == 1) {
+                    drawDeck = decks.get(players.size());
+                    discardDeck = decks.get(currentPlayerID + 1);
+                // If the last player
+                } else if (currentPlayerID == players.size());
+                    drawDeck = decks.get(currentPlayerID - 1);
+                    discardDeck = decks.get(1);
+        } 
+
 
         // Constructor
         public DrawDiscardThread (int i){
             this.currentPlayer = players.get(i);
+            
         }
 
         @Override 
@@ -201,8 +223,34 @@ public class CardGame{
                         throw new InterruptedException("A player has won");
                     }
 
-                // Check player is a winner
-                // Interrupt all threads if they do - needs to use notify
+                    // Draw a card
+                    try {
+                        drawCard = drawDeck.pickCard();
+                    } catch (Exception e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
+                    }
+                    
+
+                    // Discard the card
+                    try {
+                        discardCard = currentPlayer.chooseDiscard(players.size());
+                    } catch (Exception e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
+                    }
+
+                    // Add the discarded card to the discard deck
+                    discardDeck.addToDeck(discardCard);
+                    
+                    // Add the draw card to the hand
+                    try {
+                        currentPlayer.addToHand(drawCard);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
                 // Draw new card from draw pile - store card drawn in temporary variable
                 // Discard pile n+1 except if player number is n, then discard to 1
                 // Discard Card from hand - store card discarded in temporary variable

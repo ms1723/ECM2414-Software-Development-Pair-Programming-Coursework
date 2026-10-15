@@ -75,7 +75,7 @@ Meeting 9
 Worked more on Player discard behaviour
 Added more cases for discards
 Trying to test Deck FIFO behaviour
-Driver: Marcus
+Driver: Marcus, Navigator: Stephen
 
 Meeting 10
 14:30-15:30
@@ -92,4 +92,9 @@ Meeting 12
 12:30-13:30
 Fixed problem with static object and implementation of a list of threads, finished method to create threads
 Began write to file win conditon. Added creation for player files in distrubute cards, as well as initial input to the files.
+Driver: Stephen, Navigator: Marcus
+
+Meeting 13
+12:30-
+Continued threading implementation, added draw discard functionality.
 Driver: Stephen, Navigator: Marcus

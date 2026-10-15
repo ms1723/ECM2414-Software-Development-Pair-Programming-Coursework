@@ -61,4 +61,7 @@ public class Dump {
     // Write to everyone elses file (Each player's file only receives their one notify message)
     // For each player (if currentPlayer = n, then inform player 1)
     // Write to file "currentPlayer has informed currentPlayer+1 that currentPlayer has won"
+
+     // Check player is a winner
+     // Interrupt all threads if they do - needs to use notify
 }
