@@ -64,7 +64,7 @@ public class Player {
         //Local variable initialisation
         Card cardToDiscard = null;
         ArrayList<Card> discardList = new ArrayList<>();
-        Integer[] occurrences = new Integer[n];
+        Integer[] occurrences = new Integer[n+1];
         ArrayList<Integer> pairs = new ArrayList<>();
         int trio = 0;
         //Exception: (interrupt maybe??) Check if hand is empty
@@ -74,7 +74,7 @@ public class Player {
         }
 
         //Initialise occurrences
-        for(int i = 0; i < n; i++){
+        for(int i = 1; i <= n; i++){
             occurrences[i] = 0;
         }
 
@@ -94,7 +94,7 @@ public class Player {
         }
         //If player has trio, discard number that is not in trio
         //If no pairs, no trios, pick random from numbers that are not playerNo
-        for (int i = 0; i < occurrences.length; i++) {
+        for (int i = 1; i < occurrences.length; i++) {
             if (occurrences[i] == 3){
                 trio = i;
             }
@@ -115,7 +115,7 @@ public class Player {
                     }
                 //Case where one of the trio of items must be considered for discard
                 } else {
-                    for (int j = 0; j < n; j++) {
+                    for (int j = 0; j < weighting.length; j++) {
                         if (weighting[j] > maxWeight){
                             maxWeight = weighting[j];
                             discardIndex = j;
@@ -126,7 +126,7 @@ public class Player {
             } else if (pairs.size() == 2){
                 //No need to check size of discard list, as for two pairs all cards must be valid discards
                 //Check through weightings and log which card has been in the hand the longest
-                for (int j = 0; j < n; j++) {
+                for (int j = 0; j < weighting.length; j++) {
                     if (weighting[j] > maxWeight){
                         maxWeight = weighting[j];
                         discardIndex = j;
@@ -137,7 +137,7 @@ public class Player {
                 //Check weightings of other values
                 //If a single pair are the only valid discards, pick card with highest weighting
                 if (discardList.size() == 2){
-                    for (int j = 0; j < n; j++) {
+                    for (int j = 0; j < weighting.length; j++) {
                         if ((weighting[j] > maxWeight)){
                             maxWeight = weighting[j];
                             discardIndex = j;
@@ -145,7 +145,7 @@ public class Player {
                     }
                 //Case where pair is preferred over other non-preferred values
                 } else{
-                    for (int j = 0; j < n; j++) {
+                    for (int j = 0; j < weighting.length; j++) {
                         if (!pairs.contains(j)){
                             if (weighting[j] >= maxWeight){
                                 maxWeight = weighting[j];
@@ -156,7 +156,7 @@ public class Player {
                 } 
             //Checking case where there are no pairs or trios
             } else {
-                for (int j = 0; j < n; j++) {
+                for (int j = 0; j < weighting.length; j++) {
                     if (weighting[j] > maxWeight){
                         maxWeight = weighting[j];
                         discardIndex = j;
@@ -182,6 +182,8 @@ public class Player {
             throw new NullPointerException("No card was found to discard");
         }
     }
+    System.out.println(cardToDiscard.getCardID());
+    this.hand.remove(cardToDiscard);
     return cardToDiscard;
 }
     public boolean checkWinCondition(){

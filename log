@@ -98,3 +98,9 @@ Meeting 13
 12:30-14:30
 Continued threading implementation, added draw discard functionality. Went through fixing warnings, 
 Driver: Stephen, Navigator: Marcus
+
+15:30-16:30
+Worked more on Player discard behaviour testing
+Found and fixed some bugs with chooseDiscard
+Need to continue testing and troubleshooting bugs
+Driver: Marcus, Navigator: Stephen
