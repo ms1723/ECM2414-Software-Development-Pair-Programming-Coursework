@@ -72,11 +72,12 @@ public class ChooseCorrectDiscardTest {
         discarded = player.chooseDiscard(6);
         player.addToHand(card6);
         discarded = player.chooseDiscard(6);
-        assertTrue(discarded == card4);
+        assertTrue(discarded == card2);
 
         //Add a preferred card to force a trio discard behaviour
         //Should produce the card in the trio with the highest weight
         player.addToHand(card7);
+        discarded = player.chooseDiscard(6);
         assertTrue(discarded == card3);
         
     }
@@ -88,7 +89,25 @@ public class ChooseCorrectDiscardTest {
 
     @Test
     void discardsHighestWeight() throws Exception{
+        card1 = new Card(1, 6);
+        card2 = new Card(2, 4);
+        card3 = new Card(3, 2);
+        card4 = new Card(4, 3);
+        Card card5 = new Card(5, 5);
+        Card card6 = new Card(6, 6);
+        Card card7 = new Card(7, 4);
 
+        player.addToHand(card1);
+        player.addToHand(card2);
+        player.addToHand(card3);
+        player.addToHand(card4);
+
+        Card discarded = player.chooseDiscard(6);
+        player.addToHand(card5);
+        discarded = player.chooseDiscard(6);
+        player.addToHand(card6);
+        discarded = player.chooseDiscard(6);
+        player.addToHand(card7);
     }
 
     @Test
