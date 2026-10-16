@@ -84,6 +84,27 @@ public class ChooseCorrectDiscardTest {
 
     @Test
     void discardsPairHighestWeight() throws Exception{
+        card1 = new Card(1, 6);
+        card2 = new Card(2, 4);
+        card3 = new Card(3, 2);
+        card4 = new Card(4, 3);
+        Card card5 = new Card(5, 2);
+        Card card6 = new Card(6, 1);
+        Card card7 = new Card(7, 1);
+
+        player.addToHand(card1);
+        player.addToHand(card2);
+        player.addToHand(card3);
+        player.addToHand(card4);
+
+        //Add card in order such that a pair of twos with different weights are the last comparison of the test
+        Card discarded = player.chooseDiscard(6);
+        player.addToHand(card5);
+        discarded = player.chooseDiscard(6);
+        assertTrue(discarded == card2 || discarded == card4);
+        player.addToHand(card6);
+        discarded = player.chooseDiscard(6);
+        assertTrue(discarded == card4);
 
     }
 
@@ -95,7 +116,7 @@ public class ChooseCorrectDiscardTest {
         card4 = new Card(4, 3);
         Card card5 = new Card(5, 5);
         Card card6 = new Card(6, 6);
-        Card card7 = new Card(7, 4);
+        Card card7 = new Card(7, 2);
 
         player.addToHand(card1);
         player.addToHand(card2);
@@ -105,9 +126,15 @@ public class ChooseCorrectDiscardTest {
         Card discarded = player.chooseDiscard(6);
         player.addToHand(card5);
         discarded = player.chooseDiscard(6);
+        assertTrue(discarded == card2 || discarded == card3 || discarded == card4);
         player.addToHand(card6);
         discarded = player.chooseDiscard(6);
+        assertTrue(discarded == card3 || discarded == card4);
         player.addToHand(card7);
+        discarded = player.chooseDiscard(6);
+        assertTrue(discarded == card4);
+        player.addToHand(new Card(8, 1));
+        System.out.println(player.getHand());
     }
 
     @Test

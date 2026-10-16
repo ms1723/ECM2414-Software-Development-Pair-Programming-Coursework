@@ -94,6 +94,7 @@ Fixed problem with static object and implementation of a list of threads, finish
 Began write to file win conditon. Added creation for player files in distrubute cards, as well as initial input to the files.
 Driver: Stephen, Navigator: Marcus
 
+Thursday 15th October
 Meeting 13
 12:30-14:30
 Continued threading implementation, added draw discard functionality. Went through fixing warnings, 
@@ -104,3 +105,8 @@ Worked more on Player discard behaviour testing
 Found and fixed some bugs with chooseDiscard
 Need to continue testing and troubleshooting bugs
 Driver: Marcus, Navigator: Stephen
+
+Friday 16th October
+11:00 - 12:15
+Continuing Player behaviour tests
+Mostly working after fixing more bugs, little behaviour left in player to test

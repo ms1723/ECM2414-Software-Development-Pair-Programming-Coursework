@@ -12,7 +12,7 @@ public class Player {
 
     private int playerNo;
     private ArrayList<Card> hand;
-    private Integer[] weighting;
+    private ArrayList<Integer> weighting;
     final private int HAND_SIZE = 4;
 
     
@@ -25,7 +25,7 @@ public class Player {
         this.playerNo = playerNo;
 
         this.hand = new ArrayList<>();
-        this.weighting = new Integer[4];
+        this.weighting = new ArrayList<>();
     }
 
     //Getters
@@ -56,7 +56,7 @@ public class Player {
         this.hand.add(cardToAdd);
 
         //Reset the weighting of that slot
-        this.weighting[this.hand.indexOf(cardToAdd)] = 0;
+        this.weighting.add(0);
     }
     
     //Methods
@@ -118,9 +118,9 @@ public class Player {
                 }
             //Case where one of the trio of items must be considered for discard
             } else {
-                for (int j = 0; j < weighting.length; j++) {
-                    if (weighting[j] > maxWeight){
-                        maxWeight = weighting[j];
+                for (int j = 0; j < weighting.size(); j++) {
+                    if (weighting.get(j) > maxWeight){
+                        maxWeight = weighting.get(j);
                         discardIndex = j;
                     }
                 }
@@ -129,9 +129,9 @@ public class Player {
         } else if (pairs.size() == 2){
             //No need to check size of discard list, as for two pairs all cards must be valid discards
             //Check through weightings and log which card has been in the hand the longest
-            for (int j = 0; j < weighting.length; j++) {
-                if (weighting[j] > maxWeight){
-                    maxWeight = weighting[j];
+            for (int j = 0; j < this.weighting.size(); j++) {
+                if (weighting.get(j) > maxWeight){
+                    maxWeight = weighting.get(j);
                     discardIndex = j;
                 }
             }
@@ -140,28 +140,32 @@ public class Player {
             //Check weightings of other values
             //If a single pair are the only valid discards, pick card with highest weighting
             if (discardList.size() == 2){
-                for (int j = 0; j < weighting.length; j++) {
-                    if ((weighting[j] > maxWeight)){
-                        maxWeight = weighting[j];
+                for (int j = 0; j < this.weighting.size(); j++) {
+                    if ((weighting.get(j) > maxWeight)){
+                        maxWeight = weighting.get(j);
                         discardIndex = j;
                         }
                 }
             //Case where pair is preferred over other non-preferred values
             } else{
-                for (int j = 0; j < weighting.length; j++) {
+                for (int j = 0; j < this.weighting.size(); j++) {
+                    System.out.println(j);
                     if (!pairs.contains(this.hand.get(j).getCardValue())){
-                        if (weighting[j] >= maxWeight){
-                            maxWeight = weighting[j];
+                        System.out.println("b");
+                        if (weighting.get(j) > maxWeight){
+                            maxWeight = weighting.get(j);
                             discardIndex = j;
                         }
                     }
                 }
             } 
+
+        System.out.println(discardIndex);
         //Checking case where there are no pairs or trios
         } else {
-            for (int j = 0; j < weighting.length; j++) {
-                if (weighting[j] > maxWeight){
-                    maxWeight = weighting[j];
+            for (int j = 0; j < this.weighting.size(); j++) {
+                if (weighting.get(j) > maxWeight){
+                    maxWeight = weighting.get(j);
                     discardIndex = j;
                 }
             }
@@ -169,17 +173,20 @@ public class Player {
         //discardList should always hold the correct card to discard
         //Holds regardless of the structure of the hand
         if (discardList.size() < 4){
-            discardIndex = discardIndex - (4 - discardList.size());
+            System.out.println("a");
+            if (discardIndex > 0){
+                discardIndex = discardIndex - (4 - discardList.size());
+            }
         }
-
         cardToDiscard = discardList.get(discardIndex);
         //Whenever a slot changes, reset time that slot has been held
         //+1 to all times, starts from 0
-        for (int i = 0; i < this.weighting.length; i++){
-            this.weighting[i]++;
+        for (int i = 0; i < this.weighting.size(); i++){
+            int currentElement = this.weighting.get(i);
+            this.weighting.set(i, currentElement + 1);
         }
         //Reset weight index for value
-        this.weighting[discardIndex] = 0 ;
+        this.weighting.remove(discardIndex);
         //return card to discard (returns a card)
         if (cardToDiscard == null){
             throw new NullPointerException("No card was found to discard");
