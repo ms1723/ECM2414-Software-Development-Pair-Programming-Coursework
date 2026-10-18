@@ -110,3 +110,12 @@ Friday 16th October
 11:00 - 12:15
 Continuing Player behaviour tests
 Mostly working after fixing more bugs, little behaviour left in player to test
+
+Sunday 18th October
+10:00 - 12:15
+1:00 - 3:00
+Worked on testing threads after having finished basic logic
+Fixed many bugs with output files and logic with distributing cards
+Added outputs for deck output files
+Fixed player discard behaviour 
+Driver: Marcus, Navigator: Stephen

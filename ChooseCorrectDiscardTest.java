@@ -72,7 +72,7 @@ public class ChooseCorrectDiscardTest {
         discarded = player.chooseDiscard(6);
         player.addToHand(card6);
         discarded = player.chooseDiscard(6);
-        assertTrue(discarded == card2);
+        assertTrue(discarded == card4);
 
         //Add a preferred card to force a trio discard behaviour
         //Should produce the card in the trio with the highest weight
@@ -105,7 +105,6 @@ public class ChooseCorrectDiscardTest {
         player.addToHand(card6);
         discarded = player.chooseDiscard(6);
         assertTrue(discarded == card4);
-
     }
 
     @Test
@@ -133,13 +132,5 @@ public class ChooseCorrectDiscardTest {
         player.addToHand(card7);
         discarded = player.chooseDiscard(6);
         assertTrue(discarded == card4);
-        player.addToHand(new Card(8, 1));
-        System.out.println(player.getHand());
-    }
-
-    @Test
-    void packLoads() throws IOException{
-        game.quickInitialize(4);
-        assertTrue(game.validateAndLoadPack(game.getPlayerCount(), "cardPackFile4.txt"));
     }
 }

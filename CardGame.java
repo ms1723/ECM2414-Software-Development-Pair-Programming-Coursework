@@ -140,15 +140,15 @@ public class CardGame{
         }
 
         // Create all the player's files.txt
-        for (int i = 0; i <= playerCount; i++) {
-            Player currentPlayer = this.players.get(i);
+        for (int i = 1; i <= playerCount; i++) {
+            Player currentPlayer = this.players.get(i-1);
             try {
-                File currentPlayerFile = new File("Player"+i+"file.txt");
+                File currentPlayerFile = new File("Player"+(i)+"_output.txt");
                 if (currentPlayerFile.createNewFile()) {           // Try to create the file
                     System.out.println("File created: " + currentPlayerFile.getName());
                     try ( // Write to all the player's files their initial hand
-                        FileWriter currentPlayerFileWriter = new FileWriter(currentPlayerFile.getName())) {
-                        currentPlayerFileWriter.write("player " + i + " " + currentPlayer.getHand());
+                        FileWriter currentPlayerFileWriter = new FileWriter(currentPlayerFile.getName(), true)) {
+                        currentPlayerFileWriter.write("player " + (i) + "'s initial hand - " + currentPlayer.getHand());
                         System.out.println("Successfully wrote to the file.");
                     }
                 } else {
@@ -179,9 +179,9 @@ public class CardGame{
         }
 
         // Create all the decks's files.txt
-        for (int i = 0; i <= decks.size(); i++) {
+        for (int i = 1; i <= decks.size(); i++) {
             try {
-                File currentDeckFile = new File("Deck"+i+"file.txt");
+                File currentDeckFile = new File("Deck"+(i)+"_output.txt");
                 if (currentDeckFile.createNewFile()) {           // Try to create the file
                     System.out.println("File created: " + currentDeckFile.getName());
                 } else {
@@ -197,7 +197,7 @@ public class CardGame{
     public class DrawDiscardThread extends Thread {
         //Attributes
         Player currentPlayer;
-        int currentPlayerID = currentPlayer.getPlayerNo();
+        int currentPlayerID;
         Deck drawDeck;
         Deck discardDeck;
         Card drawCard;
@@ -205,25 +205,21 @@ public class CardGame{
 
         // Assign the draw and discard decks,
         public void findDecks() {
-                // If the player number is not the first or last player number
-                if (currentPlayerID != 1 && currentPlayerID != players.size()) {
-                    drawDeck = decks.get(currentPlayerID - 1);
-                    discardDeck = decks.get(currentPlayerID + 1);
-                // If the first player
-                } else if (currentPlayerID == 1) {
-                    drawDeck = decks.get(players.size());
-                    discardDeck = decks.get(currentPlayerID + 1);
-                // If the last player
-                } else if (currentPlayerID == players.size());
-                    drawDeck = decks.get(currentPlayerID - 1);
-                    discardDeck = decks.get(1);
+            // If the last player
+            if (currentPlayerID == players.size()) {
+                drawDeck = decks.get(currentPlayerID - 1);
+                discardDeck = decks.get(0);
+            // If the player number is not the last player number
+            } else {
+                drawDeck = decks.get(currentPlayerID - 1);
+                discardDeck = decks.get(currentPlayerID);
+            }
         } 
-
 
         // Constructor
         public DrawDiscardThread (int i){
             this.currentPlayer = players.get(i);
-            
+            currentPlayerID = currentPlayer.getPlayerNo();
         }
 
         @Override 
@@ -233,98 +229,142 @@ public class CardGame{
                 if (!players.contains(currentPlayer)) {
                     throw new PlayernotFoundException("Player not found");
                 } 
-                
+            
                 try {
-                    // Check if there's a winner, notify all threads if there is one
-                    if (currentPlayer.checkWinCondition()) {
-                        throw new InterruptedException("A player has won");
-                    }
+                    while(!isInterrupted()){
+                        // Check if there's a winner, notify all threads if there is one
+                        if (currentPlayer.checkWinCondition()) {
+                            throw new InterruptedException("A player has won");
+                        }
 
-                    // Draw a card
-                    try {
-                        drawCard = drawDeck.pickCard();
-                    } catch (NullPointerException e) {
-                        System.out.println("An error occurred.");
-                        e.printStackTrace();
-                    }
-                    
+                        // Draw a card
+                        try {
+                            drawCard = drawDeck.pickCard();
+                        } catch (NullPointerException e) {
+                            System.out.println("An error occurred.");
+                            e.printStackTrace();
+                        }
+                        //Write the draw to the player's text file
+                        try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+(currentPlayerID)+"_output.txt", true)){
+                            currentPlayerFileWriter.write("\nplayer " + (currentPlayerID) 
+                                                            + " draws a " + drawCard.getCardValue()
+                                                            + " from deck " + drawDeck.getDeckNo());
+                            currentPlayerFileWriter.close();  // must close manually
+                            System.out.println("Successfully wrote to Player" +(currentPlayerID)+"_output.txt.");
+                        } catch (IOException fileDoestExist) {
+                            System.out.println("An error occurred.");
+                            fileDoestExist.printStackTrace();
+                        }
 
-                    // Discard the card
-                    try {
-                        discardCard = currentPlayer.chooseDiscard(players.size());
-                    } catch (HandEmptyException e) {
-                        System.out.println("An error occurred.");
-                        e.printStackTrace();
-                    } catch (NullPointerException e) {
-                        System.out.println("An error occurred.");
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        System.out.println("An error occurred.");
-                        e.printStackTrace();
-                    }
+                        // Discard the card
+                        try {
+                            discardCard = currentPlayer.chooseDiscard(players.size());
+                        } catch (HandEmptyException e) {
+                            System.out.println("An error occurred.");
+                            e.printStackTrace();
+                        } catch (NullPointerException e) {
+                            System.out.println("An error occurred.");
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            System.out.println("An error occurred.");
+                            e.printStackTrace();
+                        }
+                        //Write the discard to the output file
+                        try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+(currentPlayerID)+"_output.txt", true)){
+                            currentPlayerFileWriter.write("\nplayer " + (currentPlayerID) 
+                                                            + " discards a " + discardCard.getCardValue()
+                                                            + " to deck " + discardDeck.getDeckNo());
+                            currentPlayerFileWriter.close();  // must close manually
+                            System.out.println("Successfully wrote to Player" +(currentPlayerID)+"_output.txt.");
+                        } catch (IOException fileDoestExist) {
+                            System.out.println("An error occurred.");
+                            fileDoestExist.printStackTrace();
+                        }
 
-                    // Add the discarded card to the discard deck
-                    discardDeck.addToDeck(discardCard);
-                    
-                    // Add the draw card to the hand
-                    try {
-                        currentPlayer.addToHand(drawCard);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        // Add the discarded card to the discard deck
+                        discardDeck.addToDeck(discardCard);
+                        
+                        // Add the draw card to the hand
+                        try {
+                            currentPlayer.addToHand(drawCard);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                
+                        //Write the player's new hand to the output file
+                        try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+(currentPlayerID)+"_output.txt", true)) {
+                            currentPlayerFileWriter.write("\nplayer " + (currentPlayerID) + "'s current hand - " + currentPlayer.getHand());
+                            System.out.println("Successfully wrote to Player" +(currentPlayerID)+"_output.txt.");
+                            currentPlayerFileWriter.close();  // must close manually
+                        } catch (IOException e) {
+                            System.out.println("An error occurred.");
+                            e.printStackTrace(); // Print error details
+                        }
+                    }
                 // Catch statement for when a player wins
                 } catch (InterruptedException e) {
                     // Player has won so interrupt all threads
                     InterruptAllThreads();
 
                     // Write to terminal currentPlayer wins
-                    System.out.println("player" + currentPlayerID + "wins");
+                    System.out.println("player " + (currentPlayerID) + " wins");
 
                     // Write to the winner's file:
-                    try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+currentPlayerID+"file.txt")){
-                        currentPlayerFileWriter.write("player " + currentPlayerID + " wins");
-                        currentPlayerFileWriter.write("player " + currentPlayerID + " exits");
-                        currentPlayerFileWriter.write("player " + currentPlayerID + " final hand: " + currentPlayer.getHand());
+                    try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+currentPlayerID+"_output.txt", true)){
+                        currentPlayerFileWriter.write("\nplayer " + (currentPlayerID) + " wins");
+                        currentPlayerFileWriter.write("\nplayer " + (currentPlayerID) + " exits");
+                        currentPlayerFileWriter.write("\nplayer " + (currentPlayerID) + " final hand: " + currentPlayer.getHand());
                         currentPlayerFileWriter.close();  // must close manually
-                        System.out.println("Successfully wrote to the file.");
+                        System.out.println("Successfully wrote to Player" +(currentPlayerID)+"_output.txt.");
                     } catch (IOException fileDoestExist) {
                         System.out.println("An error occurred.");
                         fileDoestExist.printStackTrace();
                     }
-                    
+                            
                     // Loop through players to notify them all that someone has won
                     for (Player iteratePlayer : players) {
-                        int itereratePlayerID = iteratePlayer.getPlayerNo();
+                        int iteratePlayerID = iteratePlayer.getPlayerNo();
                         // Don't notify the winner that they've won
                         if (currentPlayer != iteratePlayer){
-                            try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+itereratePlayerID+"file.txt")){
+                            try (FileWriter currentPlayerFileWriter = new FileWriter("Player"+iteratePlayerID+"_output.txt", true)){
                                 currentPlayerFileWriter.write(
-                                    "player " + 
-                                    currentPlayerID + 
-                                    " has informed " + 
-                                    itereratePlayerID + 
-                                    " that " + 
-                                    currentPlayerID + 
+                                    "\nplayer " + 
+                                    (currentPlayerID) + 
+                                    " has informed player " + 
+                                    (iteratePlayerID) + 
+                                    " that player " + 
+                                    (currentPlayerID) + 
                                     " has won"
                                 );
+                                currentPlayerFileWriter.write("\nplayer " + (iteratePlayerID) + " exits");
+                                currentPlayerFileWriter.write("\nplayer " + (iteratePlayerID) + " final hand: " + iteratePlayer.getHand());
                                 currentPlayerFileWriter.close();  // must close manually
-                                System.out.println("Successfully wrote to the file.");
+                                System.out.println("Successfully wrote to Player" +(iteratePlayerID)+"_output.txt.");
                             } catch (IOException fileDoestExist) {
                                 System.out.println("An error occurred.");
                                 fileDoestExist.printStackTrace();
                             }
                         }
                     }
-            }
-                
+                    //Write final deck contents
+                    for (Deck deck : decks) {
+                        int deckID = deck.getDeckNo();
+                        // Don't notify the winner that they've won
+                        try (FileWriter currentDeckFileWriter = new FileWriter("Deck"+deckID+"_output.txt", true)){
+                            currentDeckFileWriter.write("deck" + deckID + "contents " + deck.getDeckContents());
+                            currentDeckFileWriter.close();  // must close manually
+                            System.out.println("Successfully wrote to Deck" +(deckID)+"_output.txt.");
+                        } catch (IOException fileDoestExist) {
+                            System.out.println("An error occurred.");
+                            fileDoestExist.printStackTrace();
+                        }
+                    }
+                }  
             } catch (PlayernotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
         }
-
     }
 
     // Method to create the list of threads, so all active threads can be easily accessed
@@ -334,12 +374,13 @@ public class CardGame{
 
 
         // Loop for each player 
-        for (int i = 1; i <= playerCount; i++) {
+        for (int i = 0; i < playerCount; i++) {
             // Create all the threads and store them in threadList
             threadList[i] = new DrawDiscardThread(i);
+            threadList[i].findDecks();
             threadList[i].start();
         }
-        for (int j = 1; j <= playerCount; j++) {
+        for (int j = 0; j < playerCount; j++) {
             try {
                 threadList[j].join(); 
             } catch (InterruptedException e) {
@@ -375,5 +416,9 @@ public class CardGame{
     //Accessor methods
     public int getPlayerCount(){
         return CardGame.playerCount;
+    }
+
+    public Player getPlayer(int index){
+        return this.players.get(index);
     }
 }

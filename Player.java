@@ -73,7 +73,6 @@ public class Player {
             throw new HandEmptyException("Hand is empty");
         }
 
-        System.out.println(getHand());
 
         //Initialise occurrences
         for(int i = 1; i <= n; i++){
@@ -148,19 +147,24 @@ public class Player {
                 }
             //Case where pair is preferred over other non-preferred values
             } else{
-                for (int j = 0; j < this.weighting.size(); j++) {
-                    System.out.println(j);
-                    if (!pairs.contains(this.hand.get(j).getCardValue())){
-                        System.out.println("b");
-                        if (weighting.get(j) > maxWeight){
-                            maxWeight = weighting.get(j);
+                if (discardList.size() == 4){
+                    for (int j = 0; j < this.weighting.size(); j++) {
+                        if (!pairs.contains(this.hand.get(j).getCardValue())){
+                            if (weighting.get(j) > maxWeight){
+                                maxWeight = weighting.get(j);
+                                discardIndex = j;
+                            }
+                        }
+                    }
+                //Case where there is a single preferred card and a pair
+                } else {
+                    for (int j = 0; j < discardList.size(); j++){
+                        if (discardList.get(j).getCardValue() != pairs.get(0)){
                             discardIndex = j;
                         }
                     }
                 }
             } 
-
-        System.out.println(discardIndex);
         //Checking case where there are no pairs or trios
         } else {
             for (int j = 0; j < this.weighting.size(); j++) {
@@ -170,14 +174,9 @@ public class Player {
                 }
             }
         }
+
         //discardList should always hold the correct card to discard
         //Holds regardless of the structure of the hand
-        if (discardList.size() < 4){
-            System.out.println("a");
-            if (discardIndex > 0){
-                discardIndex = discardIndex - (4 - discardList.size());
-            }
-        }
         cardToDiscard = discardList.get(discardIndex);
         //Whenever a slot changes, reset time that slot has been held
         //+1 to all times, starts from 0
@@ -191,7 +190,6 @@ public class Player {
         if (cardToDiscard == null){
             throw new NullPointerException("No card was found to discard");
         }
-        System.out.println(cardToDiscard.getCardID());
         this.hand.remove(cardToDiscard);
         return cardToDiscard;
     }

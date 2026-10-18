@@ -12,10 +12,13 @@ public class CreateDeck {
         // Create the list
         ArrayList<Integer> cardPack = new ArrayList<>();
         // Go through each number (will be number of players)
-        for (int i = 1; i <= cardNumberInput; i++) {
-            // Append 4 of the current number
-            for (int j = 0; j < 4; j++) {
-                cardPack.add(i);
+        // Needs to repeat twice to get 8n cards
+        for (int k = 0; k <= 1; k++){
+            for (int i = 1; i <= cardNumberInput; i++) {
+                // Append 4 of the current number
+                for (int j = 0; j < 4; j++) {
+                    cardPack.add(i);
+                }
             }
         }
 

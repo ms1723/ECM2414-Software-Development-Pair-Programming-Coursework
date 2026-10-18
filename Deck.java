@@ -26,6 +26,15 @@ public class Deck {
         //Exception: Deck must have a number
         return this.deckNo;
     }
+
+    public String getDeckContents(){
+        String contentString = "";
+
+        for (Card card : deckContents){
+            contentString = contentString + card.getCardValue() + " ";
+        }
+        return contentString;
+    }
     //Setters
     //Parameters - takes in a new card to add to the pile
     public void addToDeck(Card cardToAdd){
