@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -420,4 +421,28 @@ public class CardGame{
     public Player getPlayer(int index){
         return this.players.get(index);
     }
+
+    public static void main(String[] args) {
+        CardGame cardGame = new CardGame();
+        String fileName = cardGame.getUserInput();
+        cardGame.initializePlayers();
+        cardGame.initializeDecks();
+
+        try {
+            cardGame.validateAndLoadPack(cardGame.getPlayerCount(), fileName);
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        try {
+            cardGame.distributeCards();
+        } catch (Exception e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        
+        cardGame.makeThreads();
+    }
 }
+

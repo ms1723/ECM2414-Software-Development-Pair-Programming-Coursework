@@ -1,8 +1,9 @@
 //Must be thread safe
 //Player must hold exactly 4 cards
 
-import exceptions.HandEmptyException;
 import java.util.ArrayList;
+
+import cards.src.exceptions.HandEmptyException;
 
 public class Player {
     //Attributes
