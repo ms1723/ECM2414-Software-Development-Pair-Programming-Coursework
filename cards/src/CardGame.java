@@ -21,12 +21,13 @@ public class CardGame{
     private ArrayList<Player> players;
     private ArrayList<Deck> decks;
     private DrawDiscardThread[] threadList;
-    private static int playerCount;
+    private int playerCount;
 
     //Methods
     public String getUserInput(){
         // Ask number of players
         String playerNumber = "0";
+        String fileName = "";
 
         // Must be a non negative non 0 integer, so keep asking 
         while (Integer.parseInt(playerNumber) <= 0){
@@ -36,21 +37,20 @@ public class CardGame{
             playerNumber = numberOfPlayers.nextLine();  // Read user input
             System.out.println("You have picked" + playerNumber);  // Output user input
             // Send to class attribute to be used by other methods,
-            CardGame.playerCount = Integer.parseInt(playerNumber);
+            this.playerCount = Integer.parseInt(playerNumber);
 
             // Send error message if input doesnt reach requirements
             if (Integer.parseInt(playerNumber) <= 0){
                 System.err.println("Must be a positive integer, re-enter number");
-            } else {
-                numberOfPlayers.close();
             }
+            // Ask file name
+            System.out.println("What is the file name for the deck of cards? (Including file type .txt)");
+            fileName = numberOfPlayers.nextLine();  // Read user input
+            
         }
 
         // Ask file name
-        System.out.println("What is the file name for the deck of cards? (Including file type .txt)");
-        try (Scanner fileNameScanner = new Scanner(System.in) // Create a Scanner object
-        ) {
-            String fileName = fileNameScanner.nextLine();  // Read user input
+        try{
             File doesFileExist = new File(fileName);
             if (doesFileExist.exists()){
                 System.out.println("Loading" + fileName);  // Output user input
@@ -68,6 +68,8 @@ public class CardGame{
     }
     //Parameters - will take in a data structure which contains all the cards in a pack
     public boolean validateAndLoadPack(int playerCount, String packName) throws IOException {
+        this.pack = new ArrayList<>();
+
         //Validate that a pack contains a combination of cards in order to win
         try (BufferedReader br = new BufferedReader(new FileReader(packName))) {
             // List which holds the count for each occurance of a number
@@ -102,8 +104,10 @@ public class CardGame{
 
     // Creating the player objects
     public void initializePlayers(){
+        this.players = new ArrayList<>();
+
         // Loop for each player
-        for (int i = 1; i <= CardGame.playerCount; i++){
+        for (int i = 1; i <= this.playerCount; i++){
             // Add the new object for the player
             players.add(new Player(i));
         }
@@ -111,8 +115,10 @@ public class CardGame{
 
     // Creating the deck objects
     public void initializeDecks(){
+        this.decks = new ArrayList<>();
+
         // Loop for each player (will be 1 deck per player)
-        for (int i = 1; i <= CardGame.playerCount; i++){
+        for (int i = 1; i <= this.playerCount; i++){
             // Add the new object for the deck
             decks.add(new Deck(i));
         }
@@ -165,7 +171,7 @@ public class CardGame{
         // Looping 4 times to give 4 cards to each deck
         for (int j = 1; j <= 4; j++) {
             // Loop through players to distribute to the decks
-            for (int i = 0; i < CardGame.playerCount; i++){
+            for (int i = 0; i < this.playerCount; i++){
                 Card currentCard = new Card(cardCount, this.pack.get(cardCount));
                 // Get the deck
                 Deck currentDeck = this.decks.get(i);
@@ -404,10 +410,7 @@ public class CardGame{
     // }
 
     public void quickInitialize(int numberOfPlayers){
-        CardGame.playerCount = numberOfPlayers;
-        this.players = new ArrayList<>();
-        this.decks = new ArrayList<>();
-        this.pack = new ArrayList<>();
+        this.playerCount = numberOfPlayers;
 
         this.initializePlayers();
         this.initializeDecks();
@@ -415,7 +418,7 @@ public class CardGame{
 
     //Accessor methods
     public int getPlayerCount(){
-        return CardGame.playerCount;
+        return this.playerCount;
     }
 
     public Player getPlayer(int index){
@@ -425,6 +428,7 @@ public class CardGame{
     public static void main(String[] args) {
         CardGame cardGame = new CardGame();
         String fileName = cardGame.getUserInput();
+
         cardGame.initializePlayers();
         cardGame.initializeDecks();
 

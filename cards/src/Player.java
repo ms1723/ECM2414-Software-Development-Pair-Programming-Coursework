@@ -3,7 +3,7 @@
 
 import java.util.ArrayList;
 
-import cards.src.exceptions.HandEmptyException;
+import exceptions.HandEmptyException;
 
 public class Player {
     //Attributes
