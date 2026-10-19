@@ -1,6 +1,5 @@
 //Must be executable
 
-
 import exceptions.HandEmptyException;
 import exceptions.PlayernotFoundException;
 import java.io.BufferedReader;

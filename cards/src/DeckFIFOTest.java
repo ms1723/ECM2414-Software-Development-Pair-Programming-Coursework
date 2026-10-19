@@ -1,11 +1,8 @@
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 public class DeckFIFOTest {
     CardGame game;
@@ -15,7 +12,6 @@ public class DeckFIFOTest {
     void setUp() throws Exception{
         game = new CardGame();
         deck = new Deck(1);
-
     }
 
     @Test 

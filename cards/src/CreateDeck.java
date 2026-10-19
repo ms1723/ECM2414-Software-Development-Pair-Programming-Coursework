@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class CreateDeck {
     // Constructor
     public CreateDeck(int cardNumberInput){

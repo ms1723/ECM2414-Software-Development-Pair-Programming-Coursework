@@ -1,4 +1,3 @@
-//
 //FIFO (first in first out)
 //I.e cards must be drawn from the front and dumped to the back
 
